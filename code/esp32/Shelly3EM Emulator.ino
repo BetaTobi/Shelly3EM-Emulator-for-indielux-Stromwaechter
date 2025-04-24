@@ -224,8 +224,15 @@ void reconnect() {
   while (!client.connected()) {
     Serial.print("Verbindung zu MQTT-Broker wird hergestellt...");
     
+    // Eindeutige Client-ID basierend auf der MAC-Adresse erzeugen
+    String clientId = "ESP32Client-" + WiFi.macAddress();
+    clientId.replace(":", ""); // Entferne Doppelpunkte
+
+    Serial.print("Verwende MQTT-ClientID: ");
+    Serial.println(clientId);
+
     // Verbindung zum MQTT-Broker herstellen
-    if (client.connect("ESP32Client", mqtt_user, mqtt_password)) {
+    if (client.connect(clientId.c_str(), mqtt_user, mqtt_password)) {
       Serial.println("Verbunden");
 
       // Abonnieren der MQTT-Topics
